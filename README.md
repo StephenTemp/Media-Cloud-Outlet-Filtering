@@ -6,8 +6,10 @@ Using ABYZ and Media-Bias Fact-Check outlet databases, I've provided outlet CSV 
 
 
 * **abyz_outlets.csv**: CSV file containing information on outlets provided by the ABYZ dataset
+
   _Information included_: **index**, **greater region**, **sub-region**, **local, national or foreign**, **name**, **media type**, **media focus**, **language**. 
 * **mbfc_outlets.csv**: CSV file containing information on outlets provided by the _Media-Bias Fact-Check_ dataset. 
+
   _Information included_: **name**, **link**, and **perceived bias**. 
 
 ### ___Scripts___:
