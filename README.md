@@ -5,6 +5,6 @@ Using ABYZ and Media-Bias Fact-Check outlet databases, I've provided outlet CSV 
 __Provided Files__:
 
 
-....**abyz_outlets.csv**: CSV file containing information on outlets provided by the ABYZ dataset
-....**mbfc_outlets.csv**: CSV file containing information on outlets provided by the Media-Bias _Fact-Check_ dataset.
+...**abyz_outlets.csv**: CSV file containing information on outlets provided by the ABYZ dataset
+...**mbfc_outlets.csv**: CSV file containing information on outlets provided by the Media-Bias _Fact-Check_ dataset.
 
