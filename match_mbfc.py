@@ -5,9 +5,11 @@
 # imports
 import os
 import csv
+import sys
 import json
 import lzma
 import tarfile
+import pandas as pd
 from progress.bar import ChargingBar, Bar
 
 def get_all_files(dir):
@@ -26,8 +28,7 @@ def match_mbfc(mbfc_file, articles_folder, outfile):
     start_loading = False
 
     # open Media Bias Fact Check outlets file
-    mbfc_fp = open(mbfc_file)
-    mbfc_outlets = json.load(mbfc_fp)
+    mbfc_outlets = pd.read_csv(mbfc_file).T.to_dict()
 
     # open tarfiles and decompress 
     content = tarfile.open(articles_folder)
@@ -36,44 +37,55 @@ def match_mbfc(mbfc_file, articles_folder, outfile):
     # charging bar for progress 
     bar = ChargingBar('Filtering MC w/ MBFC', max = len(all_lines)) # for progress reporting
 
-    with open(outfile, 'a') as out_p:
-        for line in all_lines:
-            decompressed_line = content.extractfile(line)
-            try:
-                line_content = decompressed_line.readline()
-                json_line = json.loads(line_content)
-            except: 
-                if not start_loading: 
-                    start_loading = True
-                else: print('LOAD ERROR')
-                bar.next()
-                continue
+    out_p = open(outfile, 'w')
+    writer = csv.DictWriter(out_p, ['guid', 'media_id', 'stories_id', 'collect_date', 'url', 'title', 'Name', 'Bias', 'article_url'])
+    writer.writeheader()
 
-
-                
-            '''
-            for article in json_line:
-                
-                article_url = article['url']
-                for outlet in mbfc_outlets: 
-                    if outlet['link'] in article_url:
-                        classified_article = article.copy()
-                        classified_article['mbfc_bias'] = outlet['bias']
-                        classified_article['outlet'] = outlet['name']
-
-                        # write line to file
-                        json.dump(classified_article, out_p)
-                        out_p.write('\n')
-            '''
+    for line in all_lines:
+        # decompress all files in .tar.xz folder
+        decompressed_line = content.extractfile(line)
+        try:
+            line_content = decompressed_line.readline()
+            json_line = json.loads(line_content)
+        except: 
+            if not start_loading: 
+                start_loading = True
+            else: print('LOAD ERROR')
             bar.next()
-        bar.finish()
+            continue
+        
+        all_articles = []
+        # filter articles: for each outlet, check whether an article url starts with the outlet url
+        # annotate filtered articles: merge outlet information w/ article information
+        for outlet in mbfc_outlets:
+            def join_dict(article):
+                merged = article | outlet
+                merged['article_url'] = article['url']
+                return merged
+            outlet = mbfc_outlets[outlet]
+            outlet_url = outlet['url']
+            filtered_articles = list(filter(lambda article_url: article_url['url'].startswith(outlet_url), json_line))
+            annotated_articles = list(map(join_dict, filtered_articles))
+
+            all_articles.extend(annotated_articles)
+        
+        # if there are filtered/annotated articles, write to csv file
+        if len(all_articles) > 0: 
+            writer.writerows(all_articles)
+            
+        bar.next()
+    bar.finish()
+    out_p.close()
 
          
 def main():
-    mbfc_outlet_file = "mbfc_outlets.json"
-    folder_name = "articles/zh.tar.xz"
+    mbfc_outlet_file = "mbfc_outlets.csv"
+    folder_name = sys.arv[1]
+    #folder_name = "articles/pl.tar.xz"
+    outfile_name = "mbfc_matched_" + folder_name.split('/')[1].split('.')[0] + '.csv'
 
-    match_mbfc(mbfc_file=mbfc_outlet_file, articles_folder=folder_name, outfile="matched_mbfc_zh.json")
+
+    match_mbfc(mbfc_file=mbfc_outlet_file, articles_folder=folder_name, outfile=outfile_name)
 
 if __name__ == "__main__":
     main()

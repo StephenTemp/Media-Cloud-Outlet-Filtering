@@ -6,7 +6,7 @@ __Provided Files__:
 
 
 * **abyz_outlets.csv**: CSV file containing information on outlets provided by the ABYZ dataset
-* **mbfc_outlets.csv**: CSV file containing information on outlets provided by the _Media-Bias Fact-Check_ dataset.
+* **mbfc_outlets.csv**: CSV file containing information on outlets provided by the _Media-Bias Fact-Check_ dataset. Information included: **name**, **link**, and **perceived bias**. 
 
 __Scripts__:
-* **match_mbfc.py**: Python script intended to match _tar.xz_ files containing _MediaCloud_ articles to _Media-Bias Fact-Check_ outlets listed in _mbfc_outlet.csv_. 
+* **match_mbfc.py**: Python script intended to match _tar.xz_ files containing _MediaCloud_ articles to _Media-Bias Fact-Check_ outlets listed in _mbfc_outlet.csv_. To run this script in the command line, run the template command: "__python match_mbfc.py **{TAR.XZ FILE}**__"
