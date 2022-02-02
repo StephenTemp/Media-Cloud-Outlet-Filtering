@@ -12,4 +12,4 @@ _Scripts_:
 * **match_mbfc.py**: Python script intended to match _tar.xz_ files containing _MediaCloud_ articles to _Media-Bias Fact-Check_ outlets listed in _mbfc_outlet.csv_. To run this script in the command line, run the template command: "_python match_mbfc.py **{TAR.XZ FILE}**_"
 
 
-**output**: a CSV file including all matched articles with corresponding mbfc_outlet information
+. . .**output**: a CSV file including all matched articles with corresponding mbfc_outlet information
