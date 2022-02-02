@@ -6,5 +6,7 @@ __Provided Files__:
 
 
 * **abyz_outlets.csv**: CSV file containing information on outlets provided by the ABYZ dataset
-* **mbfc_outlets.csv**: CSV file containing information on outlets provided by the Media-Bias _Fact-Check_ dataset.
+* **mbfc_outlets.csv**: CSV file containing information on outlets provided by the _Media-Bias Fact-Check_ dataset.
 
+__Scripts__:
+* **match_mbfc.py**: Python script intended to match _tar.xz_ files containing _MediaCloud_ articles. 
